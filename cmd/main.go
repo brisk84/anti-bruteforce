@@ -204,7 +204,6 @@ func main() {
 	mux.HandleFunc("/del_bl", delBlackList)
 
 	mux.HandleFunc("/h", func(writer http.ResponseWriter, request *http.Request) {
-		time.Sleep(5 * time.Second)
 		writer.WriteHeader(200)
 	})
 
