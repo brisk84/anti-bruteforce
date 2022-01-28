@@ -45,9 +45,10 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          context: ./docker
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: |
-            ${{env.VERSION_TAG}}
-            ${{env.LASTEST_TAG}}
+          tags: splitbrain/dokuwiki:${{ env.BRANCH }}
           build-args: |
-            ${{steps.version_step.outputs.version}}
+              BRANCH=${{ env.BRANCH }}
