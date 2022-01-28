@@ -49,6 +49,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: splitbrain/dokuwiki:${{ env.BRANCH }}
+          tags: brisk84/anti-bruteforce:${{ env.BRANCH }}
           build-args: |
               BRANCH=${{ env.BRANCH }}
