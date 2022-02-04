@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package AntiBruteforce;
+
+option go_package = "github.com/brisk84/anti-bruteforce/api";
+
+message LoginInfo {
+   string login = 1;
+   string password = 2;
+   string ip = 3;
+}
+
+message NetworkInfo {
+    string ip = 1;
+}
+
+message Error {
+    int32 code = 1;
+    string info = 2;
+}
+
+service AntiBruteforce {
+    rpc Login (LoginInfo) returns (Error) {}
+    rpc Reset (LoginInfo) returns (Error) {}
+    rpc AddToBlackList (NetworkInfo) returns (Error) {}
+    rpc AddToWhiteList (NetworkInfo) returns (Error) {}
+    rpc DelFromBlackList (NetworkInfo) returns (Error) {}
+    rpc DelFromWhiteList (NetworkInfo) returns (Error) {}
+}
