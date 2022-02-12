@@ -3,6 +3,7 @@ generate:
 
 build:
 	go version
+	go mod tidy
 	go build -o ./deploy/ab-srv ./cmd/server/
 	go build -o ./deploy/ab-client ./cmd/client/
 	chmod +x ./deploy/ab-srv
