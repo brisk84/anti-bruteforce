@@ -3,11 +3,11 @@ package app
 type LoginInfo struct {
 	Login    string
 	Password string
-	Ip       string
+	IP       string
 }
 
 type NetworkInfo struct {
-	Ip string
+	IP string
 }
 
 type Error struct {

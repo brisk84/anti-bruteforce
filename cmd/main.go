@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-
 	ab := app.New(10, 100, 1000)
 	grpcServer := server.NewServer(ab, "localhost:4242")
 

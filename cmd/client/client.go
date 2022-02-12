@@ -1,14 +1,13 @@
 package main
 
 import (
-	pb "anti-bruteforce/internal/server/api"
-	"flag"
-
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"time"
 
+	pb "anti-bruteforce/internal/server/api"
 	"google.golang.org/grpc"
 )
 

@@ -2,11 +2,11 @@ package server
 
 import (
 	"anti-bruteforce/internal/app"
-	pb "anti-bruteforce/internal/server/api"
 	"context"
 	"fmt"
 	"net"
 
+	pb "anti-bruteforce/internal/server/api"
 	"google.golang.org/grpc"
 )
 
@@ -51,7 +51,7 @@ func (s *Server) Stop(ctx context.Context) error {
 func (s *Server) Login(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error) {
 	var err error
 	fmt.Println("Login:", li.Login, li.Password, li.Ip)
-	err1 := s.app.Login(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, Ip: li.Ip})
+	err1 := s.app.Login(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, IP: li.Ip})
 	if err1 == nil {
 		return &pb.Error{Code: 200, Info: "ok=true"}, err
 	}
@@ -61,28 +61,27 @@ func (s *Server) Login(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error)
 func (s *Server) Reset(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error) {
 	var err error
 	fmt.Println("Reset:", li.Login, li.Password, li.Ip)
-	err1 := s.app.Reset(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, Ip: li.Ip})
+	err1 := s.app.Reset(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, IP: li.Ip})
 	_ = err1
 	return &pb.Error{Code: 404, Info: "Not found"}, err
-
 }
 
 func (s *Server) AddToBlackList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.AddToBlackList(ctx, app.NetworkInfo{Ip: ni.Ip})
+	s.app.AddToBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
 	return &pb.Error{Code: 200, Info: "Ok"}, nil
 }
 
 func (s *Server) DelFromBlackList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.DelFromBlackList(ctx, app.NetworkInfo{Ip: ni.Ip})
+	s.app.DelFromBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
 	return &pb.Error{Code: 200, Info: "Ok"}, nil
 }
 
 func (s *Server) AddToWhiteList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.AddToWhiteList(ctx, app.NetworkInfo{Ip: ni.Ip})
+	s.app.AddToWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
 	return &pb.Error{Code: 200, Info: "Ok"}, nil
 }
 
 func (s *Server) DelFromWhiteList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.DelFromWhiteList(ctx, app.NetworkInfo{Ip: ni.Ip})
+	s.app.DelFromWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
 	return &pb.Error{Code: 200, Info: "Ok"}, nil
 }
