@@ -32,7 +32,7 @@ func main() {
 
 	if err := grpcServer.Start(ctx); err != nil {
 		fmt.Println(err)
-		cancel()
+		// cancel()
 		os.Exit(1) //nolint:gocritic
 	}
 }
