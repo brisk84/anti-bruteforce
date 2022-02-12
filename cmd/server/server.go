@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	app "anti-bruteforce/internal/app"
@@ -16,8 +14,9 @@ func main() {
 	ab := app.New(10, 100, 1000)
 	grpcServer := server.NewServer(ab, "localhost:4242")
 
-	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
-	defer cancel()
+	// ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	// defer cancel()
+	ctx := context.TODO()
 
 	go func() {
 		<-ctx.Done()
