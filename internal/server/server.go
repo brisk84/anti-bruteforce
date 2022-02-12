@@ -1,11 +1,11 @@
 package server
 
 import (
-	"anti-bruteforce/internal/app"
 	"context"
 	"fmt"
 	"net"
 
+	app "anti-bruteforce/internal/app"
 	pb "anti-bruteforce/internal/server/api"
 	"google.golang.org/grpc"
 )

@@ -9,6 +9,7 @@ import (
 
 	pb "anti-bruteforce/internal/server/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func Login(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip string) string {
@@ -78,7 +79,8 @@ func main() {
 		return
 	}
 
-	conn, err := grpc.Dial("localhost:4242", grpc.WithInsecure())
+	// conn, err := grpc.Dial("localhost:4242", grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:4242", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

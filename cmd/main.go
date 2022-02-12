@@ -1,14 +1,15 @@
 package main
 
 import (
-	"anti-bruteforce/internal/app"
-	"anti-bruteforce/internal/server"
 	"context"
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	app "anti-bruteforce/internal/app"
+	server "anti-bruteforce/internal/server"
 )
 
 func main() {
