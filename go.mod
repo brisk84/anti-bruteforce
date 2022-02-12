@@ -1,6 +1,6 @@
 module anti-bruteforce
 
-go 1.15
+go 1.17
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -16,4 +16,9 @@ require (
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+)
+
+require (
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 )

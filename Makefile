@@ -2,17 +2,16 @@ generate:
 	protoc --go_out=internal/server --go_opt=paths=source_relative --go-grpc_out=internal/server --go-grpc_opt=paths=source_relative api/abti-bruteforce.proto
 
 build:
-	go version
-	go build -o ./deploy/ab-client ./cmd/client/
 	go build -o ./deploy/ab-srv ./cmd/server/
-	chmod +x ./deploy/ab-client
+	go build -o ./deploy/ab-client ./cmd/client/
 	chmod +x ./deploy/ab-srv
+	chmod +x ./deploy/ab-client
 
 run:
 	./deploy/ab-srv
 
 test:
-	go test ./internal/app
+	go test ./internal/app # -race -count 100
 	cd deploy; ./int_test.sh
 
 install-lint-deps:
