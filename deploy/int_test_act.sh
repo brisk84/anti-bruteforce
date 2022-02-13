@@ -27,27 +27,27 @@ fileEquals /tmp/ab.out "${expected_false}"
 ./ab-client l User1 Pass1 192.168.1.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_true}"
 
-./ab-client ab 192.168.1.1 >/tmp/ab.out
+./ab-client ab 192.168.1.0/25 >/tmp/ab.out
 
 ./ab-client l User2 Pass1 192.168.1.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_false}"
 
-./ab-client db 192.168.1.1 >/tmp/ab.out
+./ab-client db 192.168.1.0/25 >/tmp/ab.out
 
 ./ab-client l User2 Pass1 192.168.1.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_true}"
 
 for ((i=0; i < 100; i++))
 do
-    ./ab-client l User_$i Pass2 192.168.1.2 >/tmp/ab.out
+    ./ab-client l User_$i Pass2 192.168.2.1 >/tmp/ab.out
     fileEquals /tmp/ab.out "${expected_true}"
 done
-./ab-client l User$i Pass2 192.168.1.2 >/tmp/ab.out
+./ab-client l User$i Pass2 192.168.2.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_false}"
 
-./ab-client aw 192.168.1.1 >/tmp/ab.out
+./ab-client aw 192.168.2.0/25 >/tmp/ab.out
 
-./ab-client l User_100 Pass2 192.168.1.1 >/tmp/ab.out
+./ab-client l User_100 Pass2 192.168.2.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_true}"
 
 ./ab-client dw 192.168.1.1 >/tmp/ab.out
