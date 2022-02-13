@@ -18,7 +18,6 @@ func main() {
 
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
-	// ctx := context.TODO()
 
 	go func() {
 		<-ctx.Done()

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+chmod +x ./ab-srv
+chmod +x ./ab-client
+
 ./ab-srv>/dev/null&
 SRV_PID=$!
 

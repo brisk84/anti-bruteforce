@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"net"
 	"time"
 
 	"golang.org/x/time/rate"
@@ -40,12 +41,17 @@ func New(loginLimit, passLimit, ipLimit int) *App {
 func (a *App) Login(ctx context.Context, li LoginInfo) error {
 	fmt.Println("In app login:", li.Login, li.Password, li.IP)
 
-	var allow bool
-	if _, ok := a.whiteList[li.IP]; ok {
-		return nil
+	for k := range a.whiteList {
+		_, mask, _ := net.ParseCIDR(k)
+		if mask.Contains(net.ParseIP(li.IP)) {
+			return nil
+		}
 	}
-	if _, ok := a.blackList[li.IP]; ok {
-		return fmt.Errorf("ok=false")
+	for k := range a.blackList {
+		_, mask, _ := net.ParseCIDR(k)
+		if mask.Contains(net.ParseIP(li.IP)) {
+			return fmt.Errorf("ok=false")
+		}
 	}
 
 	if _, ok := a.buckets[li.Login]; !ok {
@@ -60,7 +66,7 @@ func (a *App) Login(ctx context.Context, li LoginInfo) error {
 		bucket := Bucket{ip: li.IP, lim: rate.NewLimiter(rate.Every(1*time.Minute), a.ipLimit)}
 		a.buckets[li.IP] = bucket
 	}
-	allow = a.buckets[li.Login].lim.Allow() && a.buckets[li.Password].lim.Allow() && a.buckets[li.IP].lim.Allow()
+	allow := a.buckets[li.Login].lim.Allow() && a.buckets[li.Password].lim.Allow() && a.buckets[li.IP].lim.Allow()
 	if !allow {
 		return fmt.Errorf("ok=false")
 	}
