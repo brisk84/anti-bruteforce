@@ -26,7 +26,7 @@ jobs:
         with:
           name: Build apps
       - name: Run Unit Tests
-        run: make test_act
+        run: make test
   
   build:
     runs-on: ubuntu-latest
