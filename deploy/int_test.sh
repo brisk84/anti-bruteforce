@@ -2,14 +2,19 @@
 ./deploy/ab-srv>/dev/null&
 SRV_PID=$!
 
-function fileEquals() {
-  local fileData
-  fileData=$(cat "$1")
-  [ "${fileData}" = "${2}" ] || (echo -e "unexpected output, $1:\n${fileData}" && exit 1)
-}
-
 expected_true='ok=true'
 expected_false='ok=false'
+
+fileEquals()
+{
+    local fileData
+    fileData=$(cat "$1")
+    if [[ "$fileData" != ${2} ]]; then
+        echo -e "unexpected output, $1:\n${fileData}"
+        kill ${SRV_PID} 2>/dev/null || true
+        exit 1
+    fi
+}
 
 for ((i=0; i < 10; i++))
 do

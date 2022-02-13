@@ -13,7 +13,7 @@ run:
 	./deploy/ab-srv
 
 test:
-	# go test -race -count 100 ./internal/app
+	go test -race -count 100 ./internal/app
 	./deploy/int_test.sh
 
 test_act:
