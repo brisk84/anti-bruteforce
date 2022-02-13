@@ -71,9 +71,9 @@ fileEquals /tmp/ab.out "${expected_false}"
 ./ab-client r User_1000 Pass_1000 192.168.1.3 >/tmp/ab.out
 
 ./ab-client l User_1000 Pass_1000 192.168.1.3 >/tmp/ab.out
-fileEquals /tmp/ab.out "${expected_false}"
+fileEquals /tmp/ab.out "${expected_true}"
 
 kill ${SRV_PID} 2>/dev/null || true
 
 rm -f /tmp/ab.out
-echo "PASS"
+echo "PASS1"
