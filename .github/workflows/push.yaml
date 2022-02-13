@@ -21,7 +21,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - name: Download math result for job 2
+      - name: Download apps
         uses: actions/download-artifact@v2
         with:
           name: Build apps
@@ -37,16 +37,16 @@ jobs:
         go-version: '^1.17'
     - name: Build apps
       run: make build
-    - name: Upload artefacts 1
+    - name: Upload server
       uses: actions/upload-artifact@v2
       with:
         name: Build apps
-        path: /deploy/ab-srv
-    - name: Upload artefacts 2
+        path: deploy/ab-srv
+    - name: Upload client
       uses: actions/upload-artifact@v2
       with:
         name: Build apps
-        path: /deploy/ab-client
+        path: deploy/ab-client
 
   # deploy:
   #   runs-on: ubuntu-latest
