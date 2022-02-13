@@ -11,7 +11,7 @@ run:
 	./deploy/ab-srv
 
 test:
-	go test ./internal/app # -race -count 100
+	go test -race -count 100 ./internal/app
 	cd deploy; ./int_test.sh
 
 install-lint-deps:
