@@ -17,7 +17,7 @@ test:
 	./deploy/int_test.sh
 
 test_act:
-	go test -race -count 100 ./internal/app
+	# go test -race -count 100 ./internal/app
 	./deploy/int_test_act.sh
 
 install-lint-deps:
