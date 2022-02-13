@@ -5,6 +5,9 @@ chmod +x ./ab-client
 ./ab-srv>/dev/null&
 SRV_PID=$!
 
+expected_true='ok=true'
+expected_false='ok=false'
+
 fileEquals()
 {
     local fileData
@@ -15,9 +18,6 @@ fileEquals()
         exit 1
     fi
 }
-
-expected_true='ok=true'
-expected_false='ok=false'
 
 for ((i=0; i < 10; i++))
 do
