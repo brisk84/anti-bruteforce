@@ -76,4 +76,4 @@ fileEquals /tmp/ab.out "${expected_true}"
 kill ${SRV_PID} 2>/dev/null || true
 
 rm -f /tmp/ab.out
-echo "PASS1"
+echo "PASS"
