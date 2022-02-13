@@ -22,7 +22,7 @@ expected_false='ok=false'
 for ((i=0; i < 10; i++))
 do
     ./ab-client l User1 Pass1 192.168.1.1 >/tmp/ab.out
-    fileEquals /tmp/ab.out "${expected_false}"
+    fileEquals /tmp/ab.out "${expected_true}"
 done
 ./ab-client l User1 Pass1 192.168.1.1 >/tmp/ab.out
 fileEquals /tmp/ab.out "${expected_false}"
