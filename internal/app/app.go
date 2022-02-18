@@ -10,10 +10,11 @@ import (
 )
 
 type Bucket struct {
-	login string
-	pass  string
-	ip    string
-	lim   *rate.Limiter
+	login   string
+	pass    string
+	ip      string
+	lim     *rate.Limiter
+	expired time.Time
 }
 
 type App struct {
@@ -24,10 +25,11 @@ type App struct {
 	loginLimit int
 	passLimit  int
 	ipLimit    int
+	ticker     *time.Ticker
 }
 
-func New(loginLimit, passLimit, ipLimit int) *App {
-	return &App{
+func New(ctx context.Context, loginLimit, passLimit, ipLimit int) *App {
+	app := App{
 		lim:        rate.NewLimiter(rate.Every(10*time.Second), 1),
 		buckets:    make(map[string]Bucket),
 		whiteList:  make(map[string]struct{}),
@@ -35,6 +37,25 @@ func New(loginLimit, passLimit, ipLimit int) *App {
 		loginLimit: loginLimit,
 		passLimit:  passLimit,
 		ipLimit:    ipLimit,
+		ticker:     time.NewTicker(10 * time.Second),
+	}
+	go app.CleanBuckets(ctx)
+	return &app
+}
+
+func (a *App) CleanBuckets(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-a.ticker.C:
+			fmt.Println("Len of buckets:", len(a.buckets))
+			for k, v := range a.buckets {
+				if time.Until(v.expired) < 1*time.Nanosecond {
+					delete(a.buckets, k)
+				}
+			}
+		}
 	}
 }
 
@@ -54,16 +75,18 @@ func (a *App) Login(ctx context.Context, li LoginInfo) error {
 		}
 	}
 
+	timeInt := 1 * time.Minute
+	timeExp := time.Now().Add(timeInt)
 	if _, ok := a.buckets[li.Login]; !ok {
-		bucket := Bucket{login: li.Login, lim: rate.NewLimiter(rate.Every(1*time.Minute), a.loginLimit)}
+		bucket := Bucket{login: li.Login, lim: rate.NewLimiter(rate.Every(timeInt), a.loginLimit), expired: timeExp}
 		a.buckets[li.Login] = bucket
 	}
 	if _, ok := a.buckets[li.Password]; !ok {
-		bucket := Bucket{pass: li.Password, lim: rate.NewLimiter(rate.Every(1*time.Minute), a.passLimit)}
+		bucket := Bucket{pass: li.Password, lim: rate.NewLimiter(rate.Every(timeInt), a.passLimit), expired: timeExp}
 		a.buckets[li.Password] = bucket
 	}
 	if _, ok := a.buckets[li.IP]; !ok {
-		bucket := Bucket{ip: li.IP, lim: rate.NewLimiter(rate.Every(1*time.Minute), a.ipLimit)}
+		bucket := Bucket{ip: li.IP, lim: rate.NewLimiter(rate.Every(timeInt), a.ipLimit), expired: timeExp}
 		a.buckets[li.IP] = bucket
 	}
 	allow := a.buckets[li.Login].lim.Allow() && a.buckets[li.Password].lim.Allow() && a.buckets[li.IP].lim.Allow()

@@ -10,7 +10,7 @@ build:
 	chmod +x ./deploy/ab-client
 
 run:
-	./deploy/ab-srv
+	go run ./cmd/server
 
 test:
 	./deploy/int_test.sh

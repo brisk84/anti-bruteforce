@@ -79,7 +79,6 @@ func main() {
 		return
 	}
 
-	// conn, err := grpc.Dial("localhost:4242", grpc.WithInsecure())
 	conn, err := grpc.Dial("localhost:4242", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

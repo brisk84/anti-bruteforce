@@ -9,7 +9,7 @@ import (
 )
 
 func TestApp(t *testing.T) {
-	ab := New(10, 100, 1000)
+	ab := New(context.TODO(), 10, 100, 1000)
 	for i := 0; i < 10; i++ {
 		err := ab.Login(context.TODO(), LoginInfo{Login: "User1", Password: "Pass1", IP: "192.168.1.1"})
 		require.NoError(t, err)
@@ -64,7 +64,7 @@ func TestApp(t *testing.T) {
 }
 
 func TestReset(t *testing.T) {
-	ab := New(10, 100, 1000)
+	ab := New(context.TODO(), 10, 100, 1000)
 	for i := 0; i < 10; i++ {
 		err := ab.Login(context.TODO(), LoginInfo{Login: "User1", Password: "Pass1", IP: "192.168.1.1"})
 		require.NoError(t, err)
@@ -78,7 +78,7 @@ func TestReset(t *testing.T) {
 }
 
 func TestBlackList(t *testing.T) {
-	ab := New(10, 100, 1000)
+	ab := New(context.TODO(), 10, 100, 1000)
 
 	ab.AddToBlackList(context.TODO(), NetworkInfo{IP: "192.168.1.0/25"})
 	err := ab.Login(context.TODO(), LoginInfo{Login: "User2", Password: "Pass1", IP: "192.168.1.1"})
@@ -90,7 +90,7 @@ func TestBlackList(t *testing.T) {
 }
 
 func TestWhiteList(t *testing.T) {
-	ab := New(10, 100, 1000)
+	ab := New(context.TODO(), 10, 100, 1000)
 
 	for i := 0; i < 100; i++ {
 		err := ab.Login(context.TODO(), LoginInfo{Login: "User_" + strconv.Itoa(i), Password: "Pass2", IP: "192.168.2.1"})
@@ -109,7 +109,7 @@ func TestWhiteList(t *testing.T) {
 }
 
 func TestIP(t *testing.T) {
-	ab := New(10, 100, 1000)
+	ab := New(context.TODO(), 10, 100, 1000)
 
 	for i := 0; i < 1000; i++ {
 		err := ab.Login(context.TODO(), LoginInfo{
