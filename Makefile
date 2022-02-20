@@ -4,23 +4,22 @@ generate:
 build:
 	# GOOS=linux GOARCH=amd64  go build -o ./deploy/ab-srv ./cmd/server/
 	# GOOS=linux GOARCH=amd64  go build -o ./deploy/ab-client ./cmd/client/
-	go build -o ./deploy/ab-srv ./cmd/server/
-	go build -o ./deploy/ab-client ./cmd/client/
-	chmod +x ./deploy/ab-srv
-	chmod +x ./deploy/ab-client
+	go build -o ab-srv ./cmd/server/
+	go build -o ab-client ./cmd/client/
+	# chmod +x ab-srv
+	# chmod +x ab-client
 
 run:
 	go run ./cmd/server
 
 test:
-	./deploy/int_test.sh
 	go test -race -count 100 ./internal/app
 
 test_act_int:
 	./deploy/int_test_act.sh
 
-test_act_unit:
-	go test -race -count 100 ./internal/app
+test_integration: build
+	./deploy/int_test.sh
 
 install-lint-deps:
 	(which golangci-lint > /dev/null) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.41.1

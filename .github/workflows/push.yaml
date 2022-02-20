@@ -4,17 +4,19 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      # - name: Extract branch name
-      #   run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
       - name: Check out code
         uses: actions/checkout@v2
-
       - name: Linters
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.41.1
-          # working-directory: ${{ env.BRANCH }}
+
+  test_unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Unit Tests
+        run: make test
 
   test_int:
     runs-on: ubuntu-latest
@@ -26,14 +28,7 @@ jobs:
         with:
           name: Build apps
       - name: Run Integration Tests
-        run: make test_act_int
-
-  test_unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Unit Tests
-        run: make test_act_unit
+        run: make test_integration
   
   build:
     runs-on: ubuntu-latest
@@ -48,12 +43,12 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Build apps
-        path: deploy/ab-srv
+        path: ab-srv
     - name: Upload client
       uses: actions/upload-artifact@v2
       with:
         name: Build apps
-        path: deploy/ab-client
+        path: ab-client
 
   # deploy:
   #   runs-on: ubuntu-latest
