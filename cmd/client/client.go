@@ -12,58 +12,65 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func Login(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip string) string {
+func Login(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip string) (string, error) {
 	li := pb.LoginInfo{Login: login, Password: pass, Ip: ip}
 	resp, err := c.Login(ctx, &li)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
 }
 
-func Reset(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip string) string {
+func Reset(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip string) (string, error) {
 	li := pb.LoginInfo{Login: login, Password: pass, Ip: ip}
 	resp, err := c.Reset(ctx, &li)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
 }
 
-func AddToBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string) string {
+func AddToBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string) (string, error) {
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.AddToBlackList(ctx, &ni)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
 }
 
-func DelFromBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string) string {
+func DelFromBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string) (string, error) {
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.DelFromBlackList(ctx, &ni)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
 }
 
-func AddToWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string) string {
+func AddToWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string) (string, error) {
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.AddToWhiteList(ctx, &ni)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
 }
 
-func DelFromWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string) string {
+func DelFromWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string) (string, error) {
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.DelFromWhiteList(ctx, &ni)
 	if err != nil {
-		return err.Error()
+		return "", err
 	}
-	return resp.Info
+	return resp.Info, nil
+}
+
+func CheckRetErr(ret string, err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(ret)
 }
 
 func main() {
@@ -97,8 +104,8 @@ func main() {
 		login = flag.Arg(1)
 		pass = flag.Arg(2)
 		ip = flag.Arg(3)
-		ret := Login(ctx, c, login, pass, ip)
-		fmt.Println(ret)
+		ret, err := Login(ctx, c, login, pass, ip)
+		CheckRetErr(ret, err)
 	}
 
 	if flag.Arg(0) == "r" {
@@ -109,7 +116,8 @@ func main() {
 		login = flag.Arg(1)
 		pass = flag.Arg(2)
 		ip = flag.Arg(3)
-		Reset(ctx, c, login, pass, ip)
+		ret, err := Reset(ctx, c, login, pass, ip)
+		CheckRetErr(ret, err)
 	}
 
 	if flag.Arg(0) == "ab" {
@@ -118,7 +126,8 @@ func main() {
 			return
 		}
 		ip = flag.Arg(1)
-		AddToBlackList(ctx, c, ip)
+		ret, err := AddToBlackList(ctx, c, ip)
+		CheckRetErr(ret, err)
 	}
 
 	if flag.Arg(0) == "db" {
@@ -127,7 +136,8 @@ func main() {
 			return
 		}
 		ip = flag.Arg(1)
-		DelFromBlackList(ctx, c, ip)
+		ret, err := DelFromBlackList(ctx, c, ip)
+		CheckRetErr(ret, err)
 	}
 
 	if flag.Arg(0) == "aw" {
@@ -136,7 +146,8 @@ func main() {
 			return
 		}
 		ip = flag.Arg(1)
-		AddToWhiteList(ctx, c, ip)
+		ret, err := AddToWhiteList(ctx, c, ip)
+		CheckRetErr(ret, err)
 	}
 
 	if flag.Arg(0) == "dw" {
@@ -145,6 +156,7 @@ func main() {
 			return
 		}
 		ip = flag.Arg(1)
-		DelFromWhiteList(ctx, c, ip)
+		ret, err := DelFromWhiteList(ctx, c, ip)
+		CheckRetErr(ret, err)
 	}
 }
