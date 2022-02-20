@@ -9,7 +9,6 @@
 make generate - генерация grpc сервера и клиента<br>
 make build - сборка исполняемых файлов<br>
 make run - запуск сервера<br>
-make test - запуск интеграционных и юнит-тестов<br>
-make test_act_int - запуск интеграционных тестов в среде github actions<br>
-make test_act_unit - запуск юнит-тестов в среде github actions<br>
+make test - запуск юнит-тестов<br>
+make test_integration - запуск интеграционных тестов<br>
 make lint - запуск линтера<br>
