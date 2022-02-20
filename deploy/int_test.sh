@@ -2,6 +2,7 @@
 
 ./ab-srv>/dev/null&
 SRV_PID=$!
+sleep 2
 
 expected_true='ok=true'
 expected_false='ok=false'
