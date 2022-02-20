@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	signal "os/signal"
@@ -16,7 +17,12 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
 
-	ab := app.New(ctx, 10, 100, 1000)
+	loginLimit := flag.Int("loginLimit", 10, "Login limit")
+	passLimit := flag.Int("passLimit", 100, "Pass limit")
+	ipLimit := flag.Int("ipLimit", 1000, "IP limit")
+	flag.Parse()
+
+	ab := app.New(ctx, *loginLimit, *passLimit, *ipLimit)
 	grpcServer := server.NewServer(ab, "localhost:4242")
 
 	go func() {
