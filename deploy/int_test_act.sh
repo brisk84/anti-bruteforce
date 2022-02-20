@@ -3,7 +3,7 @@ chmod +x ./ab-srv
 chmod +x ./ab-client
 
 # ./ab-srv>/dev/null&
-./ab-srv
+./ab-srv>/dev/null&
 SRV_PID=$!
 
 expected_true='ok=true'

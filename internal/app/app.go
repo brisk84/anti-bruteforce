@@ -49,7 +49,6 @@ func (a *App) CleanBuckets(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case <-a.ticker.C:
-			fmt.Println("Len of buckets:", len(a.buckets))
 			for k, v := range a.buckets {
 				if time.Until(v.expired) < 1*time.Nanosecond {
 					delete(a.buckets, k)
