@@ -13,7 +13,7 @@ run:
 test:
 	go test -race -count 100 ./internal/app
 
-test_integration: build
+test_integration:
 	./deploy/int_test.sh
 
 install-lint-deps:
