@@ -13,7 +13,9 @@ run:
 test:
 	go test -race -count 100 ./internal/app
 
-test_integration: build
+test_integration:
+	test -f ab-srv || make build
+	test -f ab-client || make build
 	./deploy/int_test.sh
 
 install-lint-deps:
