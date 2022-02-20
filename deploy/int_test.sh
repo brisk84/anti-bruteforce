@@ -2,7 +2,7 @@
 chmod +x ./ab-srv
 chmod +x ./ab-client
 
-./deploy/ab-srv>/dev/null&
+./ab-srv>/dev/null&
 SRV_PID=$!
 
 expected_true='ok=true'

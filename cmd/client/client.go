@@ -8,7 +8,6 @@ import (
 	"time"
 
 	pb "anti-bruteforce/internal/server/api"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
