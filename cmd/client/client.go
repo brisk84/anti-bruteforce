@@ -8,6 +8,7 @@ import (
 	"time"
 
 	pb "anti-bruteforce/internal/server/api"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,7 +17,7 @@ func Login(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip strin
 	li := pb.LoginInfo{Login: login, Password: pass, Ip: ip}
 	resp, err := c.Login(ctx, &li)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
@@ -25,7 +26,7 @@ func Reset(ctx context.Context, c pb.AntiBruteforceClient, login, pass, ip strin
 	li := pb.LoginInfo{Login: login, Password: pass, Ip: ip}
 	resp, err := c.Reset(ctx, &li)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
@@ -34,7 +35,7 @@ func AddToBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string) s
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.AddToBlackList(ctx, &ni)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
@@ -43,7 +44,7 @@ func DelFromBlackList(ctx context.Context, c pb.AntiBruteforceClient, ip string)
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.DelFromBlackList(ctx, &ni)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
@@ -52,7 +53,7 @@ func AddToWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string) s
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.AddToWhiteList(ctx, &ni)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
@@ -61,7 +62,7 @@ func DelFromWhiteList(ctx context.Context, c pb.AntiBruteforceClient, ip string)
 	ni := pb.NetworkInfo{Ip: ip}
 	resp, err := c.DelFromWhiteList(ctx, &ni)
 	if err != nil {
-		fmt.Println(err)
+		return err.Error()
 	}
 	return resp.Info
 }
