@@ -1,0 +1,12 @@
+[logger]
+level = "INFO"
+path = "stdout"
+
+[server]
+host = "localhost"
+port = "4242"
+
+[app]
+login_limit = 10
+pass_limit = 100
+ip_limit = 1000

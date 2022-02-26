@@ -1,6 +1,7 @@
 package app
 
 import (
+	"anti-bruteforce/internal/logger"
 	"context"
 	"fmt"
 	"net"
@@ -26,18 +27,23 @@ type App struct {
 	passLimit  int
 	ipLimit    int
 	ticker     *time.Ticker
+	logg       *logger.Logger
+	testMode   bool
 }
 
-func New(ctx context.Context, loginLimit, passLimit, ipLimit int) *App {
+func New(ctx context.Context, logger *logger.Logger, loginLimit, passLimit, ipLimit int, testMode bool) *App {
+	bucketTimeout := 1 * time.Minute
 	app := App{
-		lim:        rate.NewLimiter(rate.Every(10*time.Second), 1),
+		lim:        rate.NewLimiter(rate.Every(bucketTimeout), 1),
 		buckets:    make(map[string]Bucket),
 		whiteList:  make(map[string]struct{}),
 		blackList:  make(map[string]struct{}),
 		loginLimit: loginLimit,
 		passLimit:  passLimit,
 		ipLimit:    ipLimit,
-		ticker:     time.NewTicker(10 * time.Second),
+		ticker:     time.NewTicker(bucketTimeout),
+		logg:       logger,
+		testMode:   testMode,
 	}
 	go app.CleanBuckets(ctx)
 	return &app
@@ -59,7 +65,7 @@ func (a *App) CleanBuckets(ctx context.Context) {
 }
 
 func (a *App) Login(ctx context.Context, li LoginInfo) error {
-	fmt.Println("In app login:", li.Login, li.Password, li.IP)
+	a.logg.Info("In app login: " + li.Login + " " + li.Password + " " + li.IP)
 
 	for k := range a.whiteList {
 		_, mask, _ := net.ParseCIDR(k)
@@ -75,6 +81,9 @@ func (a *App) Login(ctx context.Context, li LoginInfo) error {
 	}
 
 	timeInt := 1 * time.Minute
+	if a.testMode {
+		timeInt = 10 * time.Second
+	}
 	timeExp := time.Now().Add(timeInt)
 	if _, ok := a.buckets[li.Login]; !ok {
 		bucket := Bucket{login: li.Login, lim: rate.NewLimiter(rate.Every(timeInt), a.loginLimit), expired: timeExp}
@@ -97,7 +106,7 @@ func (a *App) Login(ctx context.Context, li LoginInfo) error {
 }
 
 func (a *App) Reset(ctx context.Context, li LoginInfo) error {
-	fmt.Println("In app reset:", li.Login, li.Password, li.IP)
+	a.logg.Info("In app reset: " + li.Login + " " + li.Password + " " + li.IP)
 	delete(a.buckets, li.Login)
 	delete(a.buckets, li.Password)
 	delete(a.buckets, li.IP)
@@ -105,25 +114,25 @@ func (a *App) Reset(ctx context.Context, li LoginInfo) error {
 }
 
 func (a *App) AddToBlackList(ctx context.Context, ni NetworkInfo) error {
-	fmt.Println("In app AddToBlackList:", ni.IP)
+	a.logg.Info("In app AddToBlackList: " + ni.IP)
 	a.blackList[ni.IP] = struct{}{}
 	return nil
 }
 
 func (a *App) DelFromBlackList(ctx context.Context, ni NetworkInfo) error {
-	fmt.Println("In app DelFromBlackList:", ni.IP)
+	a.logg.Info("In app DelFromBlackList: " + ni.IP)
 	delete(a.blackList, ni.IP)
 	return nil
 }
 
 func (a *App) AddToWhiteList(ctx context.Context, ni NetworkInfo) error {
-	fmt.Println("In app AddToWhiteList:", ni.IP)
+	a.logg.Info("In app AddToWhiteList: " + ni.IP)
 	a.whiteList[ni.IP] = struct{}{}
 	return nil
 }
 
 func (a *App) DelFromWhiteList(ctx context.Context, ni NetworkInfo) error {
-	fmt.Println("In app DelFromWhiteList:", ni.IP)
+	a.logg.Info("In app DelFromWhiteList: " + ni.IP)
 	delete(a.whiteList, ni.IP)
 	return nil
 }

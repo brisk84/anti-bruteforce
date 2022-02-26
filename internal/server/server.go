@@ -2,11 +2,12 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net"
 
 	app "anti-bruteforce/internal/app"
+	"anti-bruteforce/internal/logger"
 	pb "anti-bruteforce/internal/server/api"
+
 	"google.golang.org/grpc"
 )
 
@@ -24,15 +25,15 @@ type Server struct {
 	addr       string
 	grpcServer *grpc.Server
 	app        Application
+	logg       *logger.Logger
 }
 
-func NewServer(app Application, addr string) *Server {
-	return &Server{app: app, addr: addr}
+func NewServer(app Application, addr string, logger *logger.Logger) *Server {
+	return &Server{app: app, addr: addr, logg: logger}
 }
 
 func (s *Server) Start(ctx context.Context) error {
 	s.grpcServer = grpc.NewServer()
-
 	lis, err := net.Listen("tcp", s.addr)
 	if err != nil {
 		return err
@@ -50,7 +51,7 @@ func (s *Server) Stop(ctx context.Context) error {
 
 func (s *Server) Login(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error) {
 	var err error
-	fmt.Println("Login:", li.Login, li.Password, li.Ip)
+	s.logg.Info("Login: " + li.Login + " " + li.Password + " " + li.Ip)
 	err1 := s.app.Login(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, IP: li.Ip})
 	if err1 == nil {
 		return &pb.Error{Code: 200, Info: "ok=true"}, err
@@ -59,29 +60,27 @@ func (s *Server) Login(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error)
 }
 
 func (s *Server) Reset(ctx context.Context, li *pb.LoginInfo) (*pb.Error, error) {
-	var err error
-	fmt.Println("Reset:", li.Login, li.Password, li.Ip)
-	err1 := s.app.Reset(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, IP: li.Ip})
-	_ = err1
-	return &pb.Error{Code: 404, Info: "Not found"}, err
+	s.logg.Info("Reset: " + li.Login + " " + li.Password + " " + li.Ip)
+	err := s.app.Reset(ctx, app.LoginInfo{Login: li.Login, Password: li.Password, IP: li.Ip})
+	return &pb.Error{Code: 200, Info: "Ok"}, err
 }
 
 func (s *Server) AddToBlackList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.AddToBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
-	return &pb.Error{Code: 200, Info: "Ok"}, nil
+	err := s.app.AddToBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
+	return &pb.Error{Code: 200, Info: "Ok"}, err
 }
 
 func (s *Server) DelFromBlackList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.DelFromBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
-	return &pb.Error{Code: 200, Info: "Ok"}, nil
+	err := s.app.DelFromBlackList(ctx, app.NetworkInfo{IP: ni.Ip})
+	return &pb.Error{Code: 200, Info: "Ok"}, err
 }
 
 func (s *Server) AddToWhiteList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.AddToWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
-	return &pb.Error{Code: 200, Info: "Ok"}, nil
+	err := s.app.AddToWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
+	return &pb.Error{Code: 200, Info: "Ok"}, err
 }
 
 func (s *Server) DelFromWhiteList(ctx context.Context, ni *pb.NetworkInfo) (*pb.Error, error) {
-	s.app.DelFromWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
-	return &pb.Error{Code: 200, Info: "Ok"}, nil
+	err := s.app.DelFromWhiteList(ctx, app.NetworkInfo{IP: ni.Ip})
+	return &pb.Error{Code: 200, Info: "Ok"}, err
 }

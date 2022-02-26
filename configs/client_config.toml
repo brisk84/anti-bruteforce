@@ -1,0 +1,7 @@
+[logger]
+level = "INFO"
+path = "stdout"
+
+[server]
+host = "localhost"
+port = "4242"

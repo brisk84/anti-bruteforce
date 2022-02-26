@@ -11,7 +11,7 @@ run:
 	go run ./cmd/server
 
 test:
-	go test -race -count 100 ./internal/app
+	go test -race -count 1 ./internal/app
 
 test_integration:
 	test -f ab-srv || make build
