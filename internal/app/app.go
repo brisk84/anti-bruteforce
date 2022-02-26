@@ -1,12 +1,12 @@
 package app
 
 import (
-	"anti-bruteforce/internal/logger"
 	"context"
 	"fmt"
 	"net"
 	"time"
 
+	logger "anti-bruteforce/internal/logger"
 	"golang.org/x/time/rate"
 )
 

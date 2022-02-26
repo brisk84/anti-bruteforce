@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// delWhiteCmd represents the delWhite command
+// delWhiteCmd represents the delWhite command.
 var delWhiteCmd = &cobra.Command{
 	Use:   "delWhite <ip>",
 	Short: "delWhite ip",

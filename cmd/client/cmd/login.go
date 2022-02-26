@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// loginCmd represents the login command
+// loginCmd represents the login command.
 var loginCmd = &cobra.Command{
 	Use:   "login <login> <pass> <ip>",
 	Short: "Check login, password and ip",

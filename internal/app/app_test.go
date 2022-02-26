@@ -1,12 +1,12 @@
 package app
 
 import (
-	"anti-bruteforce/internal/logger"
 	"context"
 	"strconv"
 	"testing"
 	"time"
 
+	logger "anti-bruteforce/internal/logger"
 	"github.com/stretchr/testify/require"
 )
 

@@ -12,9 +12,8 @@ import (
 	"time"
 
 	app "anti-bruteforce/internal/app"
-	"anti-bruteforce/internal/logger"
+	logger "anti-bruteforce/internal/logger"
 	server "anti-bruteforce/internal/server"
-
 	"github.com/spf13/viper"
 )
 

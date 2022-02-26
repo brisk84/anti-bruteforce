@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	pb "anti-bruteforce/internal/server/api"
 	"context"
 	"fmt"
 	"log"
@@ -13,18 +12,20 @@ import (
 	"os"
 	"time"
 
+	pb "anti-bruteforce/internal/server/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "ab-client <command> <params>",
 	Short: "CLI interface for anti-bruteforce service",
 	Long:  `CLI interface for anti-bruteforce service`,
 }
+
 var (
 	client pb.AntiBruteforceClient
 	ctx    context.Context
@@ -44,7 +45,8 @@ func Execute() {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
 
-	conn, err := grpc.Dial(net.JoinHostPort(cfg.Server.Host, cfg.Server.Port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(net.JoinHostPort(cfg.Server.Host, cfg.Server.Port),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -57,7 +59,8 @@ func Execute() {
 
 	err = rootCmd.Execute()
 	if err != nil {
-		os.Exit(1)
+		cancel()
+		os.Exit(1) //nolint:gocritic
 	}
 }
 

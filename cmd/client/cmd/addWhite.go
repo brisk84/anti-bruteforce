@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// addWhiteCmd represents the addWhite command
+// addWhiteCmd represents the addWhite command.
 var addWhiteCmd = &cobra.Command{
 	Use:   "addWhite <ip>",
 	Short: "addWhite ip",

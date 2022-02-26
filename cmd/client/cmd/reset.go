@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// resetCmd represents the reset command
+// resetCmd represents the reset command.
 var resetCmd = &cobra.Command{
 	Use:   "reset",
 	Short: "Reset login, password and ip",

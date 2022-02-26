@@ -5,9 +5,8 @@ import (
 	"net"
 
 	app "anti-bruteforce/internal/app"
-	"anti-bruteforce/internal/logger"
+	logger "anti-bruteforce/internal/logger"
 	pb "anti-bruteforce/internal/server/api"
-
 	"google.golang.org/grpc"
 )
 
